@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
+#include <filesystem>
 
 namespace game {
 
@@ -78,7 +79,7 @@ namespace game {
         ~Game();
 
         /* initialize game state(load all shaders / textures ) */
-        void Init(const std::string& shadersPath, const std::string& texturePath, const std::string& fontsPath);
+        void Init(const std::filesystem::path& shadersPath, const std::filesystem::path& texturePath, const std::filesystem::path& fontsPath);
 
         /* method used to process the inputs */
         bool ProcessInput(float dt);

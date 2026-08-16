@@ -6,7 +6,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
-#include "CLI.hpp"
+#include <filesystem>
 #include "Game.hpp"
 #include "ResourceManager.hpp"
 
@@ -17,6 +17,27 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 /* Function that initialize GLFW */
 void initializeGLFW();
 
+#ifdef _WIN32
+#include <windows.h>
+std::filesystem::path getExeDir() {
+    char path[MAX_PATH];
+    GetModuleFileNameA(nullptr, path, MAX_PATH);
+    return std::filesystem::path(path).parent_path();
+}
+#elif __APPLE__
+#include <mach-o/dyld.h>
+std::filesystem::path getExeDir() {
+    char path[1024];
+    uint32_t size = sizeof(path);
+    _NSGetExecutablePath(path, &size);
+    return std::filesystem::canonical(path).parent_path();
+}
+#else // Linux
+std::filesystem::path getExeDir() {
+    return std::filesystem::canonical("/proc/self/exe").parent_path();
+}
+#endif
+
 /* Function used to initialize a window */
 GLFWwindow* initializeWindow();
 
@@ -26,20 +47,11 @@ game::Game Snake;
 int main(int argc, char** argv)
 {
 
-    std::string shaderPath;
-    std::string imagePath;
-    std::string fontsPath;
+    std::filesystem::path exeDir = getExeDir();
 
-    try {
-        shaderPath = CLI::checkAndGetCmdOption(argv, argc + argv, "-shader");
-        imagePath = CLI::checkAndGetCmdOption(argv, argc + argv, "-image");
-        fontsPath = CLI::checkAndGetCmdOption(argv, argc + argv, "-fonts");
-    }
-    catch (std::runtime_error& ex)
-    {
-        std::cerr << ex.what() << std::endl;
-        return -1;
-    }
+    std::string shaderPath = (exeDir / "config").string();
+    std::string imagePath  = (exeDir / "images").string();
+    std::string fontsPath  = (exeDir / "fonts").string();
 
     /* Initialize window */
     GLFWwindow* window;

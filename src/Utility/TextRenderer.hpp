@@ -3,6 +3,7 @@
 #include "Shader.hpp"
 #include <glm/glm.hpp>
 #include <map>
+#include <filesystem>
 
 namespace Utility {
     
@@ -30,7 +31,7 @@ namespace Utility {
         /* shader used for text rendering */
         Shader TextShader;
         /* constructor */
-        TextRenderer(unsigned int width, unsigned int height, const std::string& shaderPath);
+        TextRenderer(unsigned int width, unsigned int height, const std::filesystem::path& shaderPath);
         /* pre-compiles a list of characters from the given font */
         void Load(std::string font, unsigned int fontSize);
         /* renders a string of text using the precompiled list of characters */

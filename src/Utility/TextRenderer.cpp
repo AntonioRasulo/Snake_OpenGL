@@ -7,11 +7,11 @@
 
 namespace Utility {
 
-    TextRenderer::TextRenderer(unsigned int width, unsigned int height, const std::string& shadersPath)
+    TextRenderer::TextRenderer(unsigned int width, unsigned int height, const std::filesystem::path& shadersPath)
     {
 
-        const std::string vertexCode = shadersPath + "\\text_2d.vs";
-        const std::string fragmentCode = shadersPath + "\\text_2d.frag";
+        const std::string vertexCode   = (shadersPath / "text_2d.vs").string();
+        const std::string fragmentCode = (shadersPath / "text_2d.frag").string();
 
         /* load and configure shader */
         TextShader = ResourceManager::LoadShader(vertexCode.c_str(), fragmentCode.c_str(), nullptr, "text");

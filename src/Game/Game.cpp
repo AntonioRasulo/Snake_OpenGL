@@ -62,15 +62,15 @@ namespace game {
         delete Text;
     }
     
-    void Game::Init(const std::string& shadersPath, const std::string& texturePath, const std::string& fontsPath)
+    void Game::Init(const std::filesystem::path& shadersPath, const std::filesystem::path& texturePath, const std::filesystem::path& fontsPath)
     {
-        const std::string vertexCode = shadersPath + "\\sprite.vs";
-        const std::string fragmentCode = shadersPath + "\\sprite.frag";
+        const std::string vertexCode = (shadersPath / "sprite.vs").string();
+        const std::string fragmentCode = (shadersPath / "sprite.frag").string();
 
-        std::string applePNG = texturePath + "\\apple.png";
-        std::string snakePNG = texturePath + "\\snake.png";
-        std::string background = texturePath + "\\background.jpg";
-        std::string ocra = fontsPath + "\\OCRAEXT.TTF";
+        std::string applePNG = (texturePath / "apple.png").string();
+        std::string snakePNG = (texturePath / "snake.png").string();
+        std::string background = (texturePath / "background.jpg").string();
+        std::string ocra = (fontsPath / "OCRAEXT.TTF").string();
 
         /* Text renderer */
         Text = new Utility::TextRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, shadersPath);
