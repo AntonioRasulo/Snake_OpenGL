@@ -126,19 +126,19 @@ namespace game {
 
         switch (m_state) {
         case(GAME_ACTIVE):
-            if (Keys[GLFW_KEY_W] && Direction::DOWN != snake[0].dir && Direction::UP != snake[0].dir) {
+            if ((Keys[GLFW_KEY_W] || Keys[GLFW_KEY_UP]) && (Direction::DOWN != snake[0].dir) && (Direction::UP != snake[0].dir)) {
                 snake[0].dir = Direction::UP;
                 return true;
             }
-            else if (Keys[GLFW_KEY_A] && Direction::RIGHT != snake[0].dir && Direction::LEFT != snake[0].dir) {
+            else if ((Keys[GLFW_KEY_A] || Keys[GLFW_KEY_LEFT]) && (Direction::RIGHT != snake[0].dir) && (Direction::LEFT != snake[0].dir)) {
                 snake[0].dir = Direction::LEFT;
                 return true;
             }
-            else if (Keys[GLFW_KEY_S] && Direction::UP != snake[0].dir && Direction::DOWN != snake[0].dir) {
+            else if ((Keys[GLFW_KEY_S] || Keys[GLFW_KEY_DOWN]) && (Direction::UP != snake[0].dir) && (Direction::DOWN != snake[0].dir)) {
                 snake[0].dir = Direction::DOWN;
                 return true;
             }
-            else if (Keys[GLFW_KEY_D] && Direction::LEFT != snake[0].dir && Direction::RIGHT != snake[0].dir) {
+            else if ((Keys[GLFW_KEY_D] || Keys[GLFW_KEY_RIGHT]) && (Direction::LEFT != snake[0].dir) && (Direction::RIGHT != snake[0].dir)) {
                 snake[0].dir = Direction::RIGHT;
                 return true;
             }
