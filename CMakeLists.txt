@@ -35,6 +35,7 @@ include_directories( ${OPENGL_INCLUDE_DIRS} )
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw-3.3.8)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/glm-0.9.9.8)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/FreeTypeAmalgam-master)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/SFML)
 
 ########################################################################
 # PROJECT EXE

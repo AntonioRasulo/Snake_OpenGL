@@ -4,3 +4,6 @@
 [submodule "lib/glm-0.9.9.8"]
 	path = lib/glm-0.9.9.8
 	url = https://github.com/g-truc/glm.git
+[submodule "lib/SFML"]
+	path = lib/SFML
+	url = https://github.com/SFML/SFML

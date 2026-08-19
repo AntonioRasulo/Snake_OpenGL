@@ -20,6 +20,7 @@ target_link_libraries(main
     stb_image
     Game
     FreeType
+    SFML::Audio
 )
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/glad)
@@ -30,7 +31,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Game)
 ########################################################################
 # Copy assets next to the executable
 ########################################################################
-set(ASSET_DIRS config fonts images)
+set(ASSET_DIRS config fonts images Music)
 
 foreach(ASSET_DIR ${ASSET_DIRS})
     add_custom_command(TARGET main POST_BUILD
