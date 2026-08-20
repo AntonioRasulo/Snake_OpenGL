@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <SFML/Audio.hpp>
 
 namespace game {
 
@@ -70,6 +71,11 @@ namespace game {
         /* Player score */
         int score;
 
+        /* Sounds */
+        sf::Music music;
+        sf::SoundBuffer eatsfxBuffer;
+        std::optional<sf::Sound> eatSfx;
+
     public:
 
         bool Keys[1024];
@@ -79,7 +85,7 @@ namespace game {
         ~Game();
 
         /* initialize game state(load all shaders / textures ) */
-        void Init(const std::filesystem::path& shadersPath, const std::filesystem::path& texturePath, const std::filesystem::path& fontsPath);
+        void Init(const std::filesystem::path& shadersPath, const std::filesystem::path& texturePath, const std::filesystem::path& fontsPath, const std::filesystem::path& soundsPath);
 
         /* method used to process the inputs */
         bool ProcessInput(float dt);

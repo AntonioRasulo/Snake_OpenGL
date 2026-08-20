@@ -31,7 +31,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Game)
 ########################################################################
 # Copy assets next to the executable
 ########################################################################
-set(ASSET_DIRS config fonts images Music)
+set(ASSET_DIRS config fonts images Sounds)
 
 foreach(ASSET_DIR ${ASSET_DIRS})
     add_custom_command(TARGET main POST_BUILD

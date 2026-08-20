@@ -3,7 +3,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <SFML/Audio.hpp>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -53,8 +52,7 @@ int main(int argc, char** argv)
     std::string shaderPath = (exeDir / "config").string();
     std::string imagePath  = (exeDir / "images").string();
     std::string fontsPath  = (exeDir / "fonts").string();
-    std::filesystem::path musicPath = (exeDir / "Music");
-    std::string musicFilePath = (musicPath / "Music.mp3").string();
+    std::filesystem::path soundsPath = (exeDir / "Sounds");
 
     /* Initialize window */
     GLFWwindow* window;
@@ -73,14 +71,9 @@ int main(int argc, char** argv)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    /* Music configuration */
-    sf::Music music(musicFilePath);
-    music.setLooping(true);
-
     /* initialize game */
     try {
-        Snake.Init(shaderPath, imagePath, fontsPath);
-        music.play();
+        Snake.Init(shaderPath, imagePath, fontsPath, soundsPath);
     }
     catch (std::runtime_error& ex)
     {

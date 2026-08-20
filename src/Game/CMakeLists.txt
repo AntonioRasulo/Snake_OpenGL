@@ -12,8 +12,10 @@ target_include_directories(Game
         ${CMAKE_CURRENT_LIST_DIR}
         ${CMAKE_CURRENT_LIST_DIR}/../Utility
         ${CMAKE_CURRENT_LIST_DIR}/../../lib/glm-0.9.9.8
+        ${CMAKE_CURRENT_LIST_DIR}/../../lib/SFML/include
 )
 
 target_link_libraries(Game
     glfw
+    SFML::Audio
 )

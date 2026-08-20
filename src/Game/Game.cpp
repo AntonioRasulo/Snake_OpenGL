@@ -62,7 +62,7 @@ namespace game {
         delete Text;
     }
     
-    void Game::Init(const std::filesystem::path& shadersPath, const std::filesystem::path& texturePath, const std::filesystem::path& fontsPath)
+    void Game::Init(const std::filesystem::path& shadersPath, const std::filesystem::path& texturePath, const std::filesystem::path& fontsPath, const std::filesystem::path& soundsPath)
     {
         const std::string vertexCode = (shadersPath / "sprite.vs").string();
         const std::string fragmentCode = (shadersPath / "sprite.frag").string();
@@ -71,6 +71,17 @@ namespace game {
         std::string snakePNG = (texturePath / "snake.png").string();
         std::string background = (texturePath / "background.jpg").string();
         std::string ocra = (fontsPath / "OCRAEXT.TTF").string();
+        std::string eatingsfx = (soundsPath / "eating.mp3").string();
+        std::string musicFilePath = (soundsPath / "Music.mp3").string();
+
+        /* Music configuration */
+        music.openFromFile(musicFilePath);
+        music.setLooping(true);
+        music.play();
+
+        /* Setting sfx */
+        eatsfxBuffer.loadFromFile(eatingsfx);
+        eatSfx.emplace(eatsfxBuffer);
 
         /* Text renderer */
         Text = new Utility::TextRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, shadersPath);
@@ -261,6 +272,10 @@ namespace game {
         /* If the snake eat the apple */
         if (result)
         {
+
+            /* Play eating sfx */
+            eatSfx->play();
+
             /* Calculate new coordinates for the apple */
             int appleX;
             int appleY;
