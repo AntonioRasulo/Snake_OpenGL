@@ -49,7 +49,7 @@ int main(int argc, char** argv)
 
     std::filesystem::path exeDir = getExeDir();
 
-    std::string shaderPath = (exeDir / "config").string();
+    std::string shaderPath = (exeDir / "shaders").string();
     std::string imagePath  = (exeDir / "images").string();
     std::string fontsPath  = (exeDir / "fonts").string();
     std::filesystem::path soundsPath = (exeDir / "Sounds");
