@@ -52,8 +52,8 @@ namespace Utility {
         FT_Set_Pixel_Sizes(face, 0, fontSize);
         /* disable byte-alignment restriction */
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        /* then for the first 128 ASCII characters, pre-load/compile their characters and store them */
-        for (GLubyte c = 0; c < 128; c++) /* lol see what I did there */
+        /* then for the first 256 ASCII characters, pre-load/compile their characters and store them */
+        for (FT_ULong c = 0; c < 256; c++)
         {
             /* load character glyph */
             if (FT_Load_Char(face, c, FT_LOAD_RENDER))
@@ -106,37 +106,64 @@ namespace Utility {
         glActiveTexture(GL_TEXTURE0);
         glBindVertexArray(VAO);
 
-        /* iterate through all characters */
-        std::string::const_iterator c;
-        for (c = text.begin(); c != text.end(); c++)
+        size_t i = 0;
+        while (i < text.size())
         {
-            Character ch = Characters[*c];
+            unsigned char byte = text[i];
+            char32_t codepoint = 0;
+            int extraBytes = 0;
+
+            if ((byte & 0x80) == 0x00)
+            {
+                codepoint = byte;
+                extraBytes = 0;
+            }
+            else if ((byte & 0xE0) == 0xC0)
+            {
+                codepoint = byte & 0x1F;
+                extraBytes = 1;
+            }
+            else if ((byte & 0xF0) == 0xE0)
+            {
+                codepoint = byte & 0x0F;
+                extraBytes = 2;
+            }
+            else if ((byte & 0xF8) == 0xF0)
+            {
+                codepoint = byte & 0x07;
+                extraBytes = 3;
+            }
+
+            for (int n = 0; n < extraBytes && i + 1 < text.size(); n++)
+            {
+                i++;
+                codepoint = (codepoint << 6) | (text[i] & 0x3F);
+            }
+            i++;
+
+            Character ch = Characters[codepoint];
 
             float xpos = x + ch.Bearing.x * scale;
-            float ypos = y + (Characters['H'].Bearing.y - ch.Bearing.y) * scale;
+            float ypos = y + (Characters[U'H'].Bearing.y - ch.Bearing.y) * scale;
 
             float w = ch.Size.x * scale;
             float h = ch.Size.y * scale;
-            /* update VBO for each character */
-            float vertices[6][4] = {
-                { xpos,     ypos + h,   0.0f, 1.0f },
-                { xpos + w, ypos,       1.0f, 0.0f },
-                { xpos,     ypos,       0.0f, 0.0f },
 
-                { xpos,     ypos + h,   0.0f, 1.0f },
-                { xpos + w, ypos + h,   1.0f, 1.0f },
-                { xpos + w, ypos,       1.0f, 0.0f }
-            };
-            /* render glyph texture over quad */
+            float vertices[6][4] = {
+                {xpos, ypos + h, 0.0f, 1.0f},
+                {xpos + w, ypos, 1.0f, 0.0f},
+                {xpos, ypos, 0.0f, 0.0f},
+                {xpos, ypos + h, 0.0f, 1.0f},
+                {xpos + w, ypos + h, 1.0f, 1.0f},
+                {xpos + w, ypos, 1.0f, 0.0f}};
+
             glBindTexture(GL_TEXTURE_2D, ch.TextureID);
-            /* update content of VBO memory */
             glBindBuffer(GL_ARRAY_BUFFER, VBO);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); /* be sure to use glBufferSubData and not glBufferData */
+            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
-            /* render quad */
             glDrawArrays(GL_TRIANGLES, 0, 6);
-            /* now advance cursors for next glyph */
-            x += (ch.Advance >> 6) * scale; /* bitshift by 6 to get value in pixels (1/64th times 2^6 = 64) */
+
+            x += (ch.Advance >> 6) * scale;
         }
         glBindVertexArray(0);
         glBindTexture(GL_TEXTURE_2D, 0);

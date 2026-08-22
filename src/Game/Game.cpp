@@ -205,19 +205,20 @@ namespace game {
             break;
         }
         case(GAME_MENU):
-            Text->RenderText("Press Spacebar to start", 400.0f, SCREEN_HEIGHT / 2, 1.0f);
+            Text->RenderText("Snëk!", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.4, 5.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+            Text->RenderText("Press Spacebar to start", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.6, 1.0f);
             break;
 
         case(GAME_WIN):
-            Text->RenderText("Congratulation! You Win!", 400.0f, SCREEN_HEIGHT / 2, 1.0f);
-            Text->RenderText("Press Spacebar to start a new game", 400.0f, (SCREEN_HEIGHT + 50.0f) / 2, 1.0f);
+            Text->RenderText("Congratulation! You Win!", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.4, 1.0f);
+            Text->RenderText("Press Spacebar to start a new game", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.6, 1.0f);
             break;
         case(GAME_LOOSE):
 
             Text->RenderText("You have lost", 400.0f, SCREEN_HEIGHT / 2, 1.0f);
             std::stringstream ss; ss << score;
             Text->RenderText("Final Score: " + ss.str(), 400.0f, (SCREEN_HEIGHT +50.0f )/ 2, 1.0f);
-            Text->RenderText("Press Spacebar to start a new game", 400.0f, (SCREEN_HEIGHT + 100.0f) / 2, 1.0f);
+            Text->RenderText("Press Spacebar to start a new game", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.6, 1.0f);
             
             break;
         }
