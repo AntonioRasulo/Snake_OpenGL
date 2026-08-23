@@ -7,6 +7,7 @@
 #include <vector>
 #include <filesystem>
 #include <SFML/Audio.hpp>
+#include "GameObject.hpp"
 
 namespace game {
 
@@ -35,13 +36,6 @@ namespace game {
     const int NUM_ROWS = 50;
 
     const unsigned int SQUARE_SIZE = SCREEN_WIDTH / NUM_COLUMN;
-
-    struct gameObject {
-
-        int x;
-        int y;
-
-    };
 
     struct snakePiece : public gameObject {
         /* Constructor */
