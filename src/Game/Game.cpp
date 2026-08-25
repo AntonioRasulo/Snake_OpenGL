@@ -13,39 +13,41 @@ namespace game {
     bool checkAppleCoordinateValidity(int x, int y, const std::vector<snakePiece>& snakePieces);
 
     snakePiece::snakePiece(int xPos, int yPos, Direction dirObject) {
-        x = xPos;
-        y = yPos;
+        Position.x = xPos;
+        Position.y = yPos;
         dir = dirObject;
+        Size = glm::vec2(SQUARE_SIZE, SQUARE_SIZE);
+        Sprite = Utility::ResourceManager::GetTexture("snake");
     }
 
     void snakePiece::move() {
 
         switch (dir) {
         case(Direction::UP):
-            y--;
+            Position.y-=SQUARE_SIZE;
             break;
         case(Direction::RIGHT):
-            x++;
+            Position.x+=SQUARE_SIZE;
             break;
         case(Direction::LEFT):
-            x--;
+            Position.x-=SQUARE_SIZE;
             break;
         case(Direction::DOWN):
-            y++;
+            Position.y+=SQUARE_SIZE;
             break;
         }
 
-        if (y < 0) {
-            y = NUM_ROWS - 1;
+        if (Position.y < 0) {
+            Position.y = (NUM_ROWS - 1) * SQUARE_SIZE;
         }
-        else if (y > NUM_ROWS - 1) {
-            y = 0;
+        else if (Position.y > (NUM_ROWS - 1) * SQUARE_SIZE) {
+            Position.y = 0;
         }
-        else if (x > NUM_COLUMN - 1) {
-            x = 0;
+        else if (Position.x > (NUM_COLUMN - 1) * SQUARE_SIZE) {
+            Position.x = 0;
         }
-        else if (x < 0) {
-            x = NUM_COLUMN - 1;
+        else if (Position.x < 0) {
+            Position.x = (NUM_COLUMN - 1) * SQUARE_SIZE;
         }
 
     }
@@ -173,12 +175,13 @@ namespace game {
 
     }
 
-    bool Game::CheckCollision(const GameObject& one, const gameObject& two)
+    bool Game::CheckCollision(const GameObject& one, const GameObject& two)
     {
         glm::vec2 onePos = one.Position;
+        glm::vec2 twoPos = two.Position;
 
-        bool collisionX = onePos.x == two.x * SQUARE_SIZE;
-        bool collisionY = onePos.y == two.y * SQUARE_SIZE;
+        bool collisionX = onePos.x == twoPos.x;
+        bool collisionY = onePos.y == twoPos.y;
 
         return collisionX && collisionY;
     }
@@ -197,7 +200,7 @@ namespace game {
             /* Draw apple and snake */
             apple.Draw(*Renderer);
             for (snakePiece& piece : snake) {
-                drawSquare(piece.x, piece.y, "snake");
+                piece.Draw(*Renderer);
             }
             /* Draw the score */
             std::stringstream ss; ss << score;
@@ -264,14 +267,13 @@ namespace game {
     void Game::DoCollisions()
     {
 
-        for (int i = snake.size() - 1; i != 0; i--) {
-
-            if (snake[i].x == snake[0].x && snake[i].y == snake[0].y) {
-
+        for (int i = snake.size() - 1; i != 0; i--)
+        {
+            if(CheckCollision(snake[i], snake[0]))
+            {
                 m_state = GAME_LOOSE;
                 return;
             }
-
         }
 
         bool result = CheckCollision(apple, snake[0]);
@@ -301,20 +303,20 @@ namespace game {
 
             switch (tailDir) {
             case(Direction::UP):
-                newX = snake.rbegin()->x;
-                newY = snake.rbegin()->y + 1;
+                newX = snake.rbegin()->Position.x;
+                newY = snake.rbegin()->Position.y + SQUARE_SIZE;
                 break;
             case(Direction::DOWN):
-                newX = snake.rbegin()->x;
-                newY = snake.rbegin()->y - 1;
+                newX = snake.rbegin()->Position.x;
+                newY = snake.rbegin()->Position.y - SQUARE_SIZE;
                 break;
             case(Direction::LEFT):
-                newY = snake.rbegin()->y;
-                newX = snake.rbegin()->x + 1;
+                newY = snake.rbegin()->Position.y;
+                newX = snake.rbegin()->Position.x + SQUARE_SIZE;
                 break;
             case(Direction::RIGHT):
-                newY = snake.rbegin()->y;
-                newX = snake.rbegin()->x - 1;
+                newY = snake.rbegin()->Position.y;
+                newX = snake.rbegin()->Position.x - SQUARE_SIZE;
                 break;
             }
 
@@ -355,7 +357,7 @@ namespace game {
     {
         for (const snakePiece& piece: snakePieces) {
 
-            if (x == piece.x && y == piece.y)
+            if (x == piece.Position.x && y == piece.Position.y)
                 return true;
 
         }
