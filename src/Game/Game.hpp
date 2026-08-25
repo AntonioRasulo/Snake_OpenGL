@@ -7,6 +7,7 @@
 #include <vector>
 #include <filesystem>
 #include <SFML/Audio.hpp>
+#include "GameObject.hpp"
 
 namespace game {
 
@@ -65,7 +66,7 @@ namespace game {
         Utility::TextRenderer* Text;
 
         /* Snake and Apple objects */
-        gameObject apple;
+        GameObject apple;
         std::vector<snakePiece> snake;
 
         /* Player score */
@@ -95,7 +96,7 @@ namespace game {
         void Render();
 
         /* method that check if two object collide */
-        bool CheckCollision(const gameObject& one, const gameObject& two);
+        bool CheckCollision(const GameObject& one, const gameObject& two);
 
         /* method used to handle the collisions between the objects */
         void DoCollisions();

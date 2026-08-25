@@ -173,11 +173,12 @@ namespace game {
 
     }
 
-    bool Game::CheckCollision(const gameObject& one, const gameObject& two)
+    bool Game::CheckCollision(const GameObject& one, const gameObject& two)
     {
+        glm::vec2 onePos = one.Position;
 
-        bool collisionX = one.x == two.x;
-        bool collisionY = one.y == two.y;
+        bool collisionX = onePos.x == two.x * SQUARE_SIZE;
+        bool collisionY = onePos.y == two.y * SQUARE_SIZE;
 
         return collisionX && collisionY;
     }
@@ -194,7 +195,7 @@ namespace game {
         {
         case(GAME_ACTIVE): {
             /* Draw apple and snake */
-            drawSquare(apple.x, apple.y, "apple");
+            apple.Draw(*Renderer);
             for (snakePiece& piece : snake) {
                 drawSquare(piece.x, piece.y, "snake");
             }
@@ -245,11 +246,16 @@ namespace game {
     {
         /* reset player stats */
         snake.clear();
-
-        apple.x = generateRandomCoordinate(NUM_COLUMN - 1);
-        apple.y = generateRandomCoordinate(NUM_ROWS - 1);
-
         snake.push_back(snakePiece(0, 0, Direction::RIGHT));
+
+        int apple_x = generateRandomCoordinate(NUM_COLUMN - 1);
+        int apple_y = generateRandomCoordinate(NUM_ROWS - 1);
+
+        apple.Init(
+            glm::vec2(SQUARE_SIZE * apple_x, SQUARE_SIZE * apple_y),
+            glm::vec2(SQUARE_SIZE, SQUARE_SIZE),
+            Utility::ResourceManager::GetTexture("apple")
+        );
 
         score = 0;
 
@@ -285,8 +291,7 @@ namespace game {
                 appleY = generateRandomCoordinate(NUM_ROWS - 1);
             } while (checkAppleCoordinateValidity(appleX, appleY, snake));
 
-            apple.x = appleX;
-            apple.y = appleY;
+            apple.Position = glm::vec2(SQUARE_SIZE * appleX, SQUARE_SIZE * appleY);
 
             Direction tailDir = snake.rbegin()->dir;
             
