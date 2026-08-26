@@ -6,6 +6,7 @@ target_sources(Game
     PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/Game.cpp
         ${CMAKE_CURRENT_LIST_DIR}/GameObject.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/GameLevel.cpp
 )
 
 target_include_directories(Game

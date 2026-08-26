@@ -1,4 +1,6 @@
 #include "GameLevel.hpp"
+#include "Game.hpp"
+#include "ResourceManager.hpp"
 #include <fstream>
 #include <sstream>
 
@@ -53,7 +55,20 @@ namespace game {
         // const int NUM_ROWS = 50;
         for(auto coords : tileData)
         {
-            
+            glm::vec2 pos(SQUARE_SIZE * coords.first, SQUARE_SIZE * coords.second);
+            glm::vec2 size(SQUARE_SIZE, SQUARE_SIZE);
+            GameObject obj(pos, size, 
+                           Utility::ResourceManager::GetTexture("apple"),
+                           glm::vec3(0.8f, 0.8f, 0.7f));
+            Bricks.push_back(obj);
+        }
+    }
+
+    void GameLevel::Draw(Utility::SpriteRenderer &renderer)
+    {
+        for(auto& brick: Bricks)
+        {
+            brick.Draw(renderer);
         }
     }
 

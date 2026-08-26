@@ -52,6 +52,7 @@ int main(int argc, char** argv)
     std::string shaderPath = (exeDir / "shaders").string();
     std::string imagePath  = (exeDir / "images").string();
     std::string fontsPath  = (exeDir / "fonts").string();
+    std::string levelsPath = (exeDir / "levels").string();
     std::filesystem::path soundsPath = (exeDir / "Sounds");
 
     /* Initialize window */
@@ -77,7 +78,7 @@ int main(int argc, char** argv)
 
     /* initialize game */
     try {
-        Snake.Init(shaderPath, imagePath, fontsPath, soundsPath);
+        Snake.Init(shaderPath, imagePath, fontsPath, soundsPath, levelsPath);
     }
     catch (std::runtime_error& ex)
     {

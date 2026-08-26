@@ -64,7 +64,7 @@ namespace game {
         delete Text;
     }
     
-    void Game::Init(const std::filesystem::path& shadersPath, const std::filesystem::path& texturePath, const std::filesystem::path& fontsPath, const std::filesystem::path& soundsPath)
+    void Game::Init(const std::filesystem::path& shadersPath, const std::filesystem::path& texturePath, const std::filesystem::path& fontsPath, const std::filesystem::path& soundsPath, const std::filesystem::path& levelsPath)
     {
         const std::string vertexCode = (shadersPath / "sprite.vs").string();
         const std::string fragmentCode = (shadersPath / "sprite.frag").string();
@@ -75,6 +75,10 @@ namespace game {
         std::string ocra = (fontsPath / "OCRAEXT.TTF").string();
         std::string eatingsfx = (soundsPath / "eating.mp3").string();
         std::string musicFilePath = (soundsPath / "Music.mp3").string();
+
+        // Load Levels
+        GameLevel zero; zero.Load((levelsPath / "zero.txt").string().c_str());
+        Levels.push_back(zero);
 
         /* Music configuration */
         music.openFromFile(musicFilePath);
@@ -205,6 +209,9 @@ namespace game {
             /* Draw the score */
             std::stringstream ss; ss << score;
             Text->RenderText("Score: " + ss.str(), 5.0f, 5.0f, 1.0f);
+
+            // Draw level
+            Levels[CurrentLevel].Draw(*Renderer);
 
             break;
         }

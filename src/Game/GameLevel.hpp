@@ -17,7 +17,7 @@ class GameLevel
     public:
         glm::vec2 snakeStartPos;
 
-        std::vector<gameObject> Bricks;
+        std::vector<GameObject> Bricks;
 
         // Load level from file
         void Load(const char *file);

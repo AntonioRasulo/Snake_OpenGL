@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <SFML/Audio.hpp>
 #include "GameObject.hpp"
+#include "GameLevel.hpp"
 
 namespace game {
 
@@ -70,6 +71,10 @@ namespace game {
         sf::SoundBuffer eatsfxBuffer;
         std::optional<sf::Sound> eatSfx;
 
+        /* Levels */
+        std::vector<GameLevel> Levels;
+        unsigned int CurrentLevel = 0;
+
     public:
 
         bool Keys[1024];
@@ -79,7 +84,7 @@ namespace game {
         ~Game();
 
         /* initialize game state(load all shaders / textures ) */
-        void Init(const std::filesystem::path& shadersPath, const std::filesystem::path& texturePath, const std::filesystem::path& fontsPath, const std::filesystem::path& soundsPath);
+        void Init(const std::filesystem::path& shadersPath, const std::filesystem::path& texturePath, const std::filesystem::path& fontsPath, const std::filesystem::path& soundsPath, const std::filesystem::path& levelsPath);
 
         /* method used to process the inputs */
         bool ProcessInput(float dt);
