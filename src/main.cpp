@@ -42,7 +42,7 @@ std::filesystem::path getExeDir() {
 GLFWwindow* initializeWindow();
 
 /* Initialize Game */
-game::Game Snake;
+game::Game* SnakePtr = nullptr;
 
 int main(int argc, char** argv)
 {
@@ -70,6 +70,10 @@ int main(int argc, char** argv)
     glViewport(0, 0, game::SCREEN_WIDTH, game::SCREEN_HEIGHT);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    /* Initialize Game */
+    game::Game Snake;
+    SnakePtr = &Snake;
 
     /* initialize game */
     try {
@@ -102,7 +106,7 @@ int main(int argc, char** argv)
             changedDirection = Snake.ProcessInput(deltaTime);
 
         }
-        
+
         if (deltaTime >= 1 / FRAMERATE) {
 
             /* update game state */
@@ -145,9 +149,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (0 <= key && 1024 > key)
     {
         if (action == GLFW_PRESS)
-            Snake.Keys[key] = true;
+            SnakePtr->Keys[key] = true;
         else if (action == GLFW_RELEASE)
-            Snake.Keys[key] = false;
+            SnakePtr->Keys[key] = false;
 
     }
 }

@@ -37,7 +37,7 @@ namespace game {
 
     const unsigned int SQUARE_SIZE = SCREEN_WIDTH / NUM_COLUMN;
 
-    struct snakePiece : public gameObject {
+    struct snakePiece : public GameObject {
         /* Constructor */
         snakePiece(int xPos, int yPos, Direction dirObject);
 
@@ -59,7 +59,7 @@ namespace game {
         Utility::TextRenderer* Text;
 
         /* Snake and Apple objects */
-        gameObject apple;
+        GameObject apple;
         std::vector<snakePiece> snake;
 
         /* Player score */
@@ -89,7 +89,7 @@ namespace game {
         void Render();
 
         /* method that check if two object collide */
-        bool CheckCollision(const gameObject& one, const gameObject& two);
+        bool CheckCollision(const GameObject& one, const GameObject& two);
 
         /* method used to handle the collisions between the objects */
         void DoCollisions();
