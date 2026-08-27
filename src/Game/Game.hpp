@@ -75,6 +75,8 @@ namespace game {
         std::vector<GameLevel> Levels;
         unsigned int CurrentLevel = 0;
 
+        bool generateValidAppleCoord(int x, int y);
+
     public:
 
         bool Keys[1024];

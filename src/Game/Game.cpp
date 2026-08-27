@@ -10,7 +10,6 @@ namespace game {
 
     int generateRandomCoordinate(int max);
     glm::vec2 generatePosition(int x, int y);
-    bool checkAppleCoordinateValidity(int x, int y, const std::vector<snakePiece>& snakePieces);
 
     snakePiece::snakePiece(int xPos, int yPos, Direction dirObject) {
         Position.x = xPos;
@@ -258,8 +257,13 @@ namespace game {
         snake.clear();
         snake.push_back(snakePiece(0, 0, Direction::RIGHT));
 
-        int apple_x = generateRandomCoordinate(NUM_COLUMN - 1);
-        int apple_y = generateRandomCoordinate(NUM_ROWS - 1);
+        /* Calculate new coordinates for the apple */
+        int apple_x;
+        int apple_y;
+        do {
+            apple_x = generateRandomCoordinate(NUM_COLUMN - 1);
+            apple_y = generateRandomCoordinate(NUM_ROWS - 1);
+        } while (generateValidAppleCoord(apple_x, apple_y));
 
         apple.Init(
             glm::vec2(SQUARE_SIZE * apple_x, SQUARE_SIZE * apple_y),
@@ -297,7 +301,7 @@ namespace game {
             do {
                 appleX = generateRandomCoordinate(NUM_COLUMN - 1);
                 appleY = generateRandomCoordinate(NUM_ROWS - 1);
-            } while (checkAppleCoordinateValidity(appleX, appleY, snake));
+            } while (generateValidAppleCoord(appleX, appleY));
 
             apple.Position = glm::vec2(SQUARE_SIZE * appleX, SQUARE_SIZE * appleY);
 
@@ -339,6 +343,7 @@ namespace game {
 
         }
 
+        /* Check collision snake - brick */
         for(const auto& brick : Levels[CurrentLevel].Bricks)
         {
             if(CheckCollision(brick, snake[0]))
@@ -368,13 +373,23 @@ namespace game {
 
     }
 
-    bool checkAppleCoordinateValidity(int x, int y, const std::vector<snakePiece>& snakePieces)
+    bool Game::generateValidAppleCoord(int x, int y)
     {
-        for (const snakePiece& piece: snakePieces) {
 
+        for (const snakePiece& piece: snake)
+        {
             if (x == piece.Position.x && y == piece.Position.y)
+            {
                 return true;
+            }
+        }
 
+        for (const auto& brick: Levels[CurrentLevel].Bricks)
+        {
+            if (x == brick.Position.x && y == brick.Position.y)
+            {
+                return true;
+            }
         }
 
         return false;
