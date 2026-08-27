@@ -274,19 +274,18 @@ namespace game {
     void Game::DoCollisions()
     {
 
+        /* Check collision snake - snake */
         for (int i = snake.size() - 1; i != 0; i--)
         {
             if(CheckCollision(snake[i], snake[0]))
             {
                 m_state = GAME_LOOSE;
-                return;
+                break;
             }
         }
 
-        bool result = CheckCollision(apple, snake[0]);
-
         /* If the snake eat the apple */
-        if (result)
+        if (CheckCollision(apple, snake[0]))
         {
 
             /* Play eating sfx */
@@ -338,6 +337,15 @@ namespace game {
                 m_state = GAME_WIN;
             }
 
+        }
+
+        for(const auto& brick : Levels[CurrentLevel].Bricks)
+        {
+            if(CheckCollision(brick, snake[0]))
+            {
+                m_state = GAME_LOOSE;
+                break;
+            }
         }
 
     }
