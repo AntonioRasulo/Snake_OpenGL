@@ -121,6 +121,8 @@ namespace game {
 
         if (GAME_ACTIVE == m_state)
         {
+            time += dt;
+
             /* Check for collisions */
             DoCollisions();
 
@@ -209,6 +211,10 @@ namespace game {
             std::stringstream ss; ss << score;
             Text->RenderText("Score: " + ss.str(), 5.0f, 5.0f, 1.0f);
 
+            /* Draw the time */
+            ss<<(int)time;
+            Text->RenderText("Time: " + ss.str(), 800.0f, 5.0f, 1.0f);
+
             // Draw level
             Levels[CurrentLevel].Draw(*Renderer);
 
@@ -272,6 +278,7 @@ namespace game {
         );
 
         score = 0;
+        time = 0;
 
     }
 

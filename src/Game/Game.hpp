@@ -66,6 +66,9 @@ namespace game {
         /* Player score */
         int score;
 
+        /* Current Level Time */
+        float time;
+
         /* Sounds */
         sf::Music music;
         sf::SoundBuffer eatsfxBuffer;
