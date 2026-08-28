@@ -50,15 +50,12 @@ namespace game {
 
     void GameLevel::Init(std::vector<std::pair<int, int>> tileData)
     {
-        //unsigned int lvlWidth =
-        // const int NUM_COLUMN = 50;
-        // const int NUM_ROWS = 50;
         for(auto coords : tileData)
         {
             glm::vec2 pos(SQUARE_SIZE * coords.first, SQUARE_SIZE * coords.second);
             glm::vec2 size(SQUARE_SIZE, SQUARE_SIZE);
             GameObject obj(pos, size, 
-                           Utility::ResourceManager::GetTexture("apple"),
+                           Utility::ResourceManager::GetTexture("bricks"),
                            glm::vec3(0.8f, 0.8f, 0.7f));
             Bricks.push_back(obj);
         }

@@ -71,13 +71,10 @@ namespace game {
         std::string applePNG = (texturePath / "apple.png").string();
         std::string snakePNG = (texturePath / "snake.png").string();
         std::string background = (texturePath / "background.jpg").string();
+        std::string bricksJPG = (texturePath / "bricks.jpg").string();
         std::string ocra = (fontsPath / "OCRAEXT.TTF").string();
         std::string eatingsfx = (soundsPath / "eating.mp3").string();
         std::string musicFilePath = (soundsPath / "Music.mp3").string();
-
-        // Load Levels
-        GameLevel zero; zero.Load((levelsPath / "zero.txt").string().c_str());
-        Levels.push_back(zero);
 
         /* Music configuration */
         music.openFromFile(musicFilePath);
@@ -110,6 +107,11 @@ namespace game {
         Utility::ResourceManager::LoadTexture(applePNG.c_str(), true, "apple");
         Utility::ResourceManager::LoadTexture(snakePNG.c_str(), true, "snake");
         Utility::ResourceManager::LoadTexture(background.c_str(), false, "background");
+        Utility::ResourceManager::LoadTexture(bricksJPG.c_str(), false, "bricks");
+
+        // Load Levels
+        GameLevel zero; zero.Load((levelsPath / "zero.txt").string().c_str());
+        Levels.push_back(zero);
 
         /* Reset Snake and Apple position */
         ResetPlayer();
