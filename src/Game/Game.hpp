@@ -33,8 +33,8 @@ namespace game {
     /* The height of the screen */
     const unsigned int SCREEN_HEIGHT = 1000;
 
-    const int NUM_COLUMN = 50;
-    const int NUM_ROWS = 50;
+    const int NUM_COLUMN = 25;
+    const int NUM_ROWS = 25;
 
     const unsigned int SQUARE_SIZE = SCREEN_WIDTH / NUM_COLUMN;
 
