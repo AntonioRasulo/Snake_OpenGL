@@ -40,13 +40,15 @@ namespace game {
 
     struct snakePiece : public GameObject {
         /* Constructor */
-        snakePiece(int xPos, int yPos, Direction dirObject);
+        snakePiece(int xPos, int yPos, Direction dirObject, bool is_head = false);
 
         /* Direction of the piece */
         Direction dir;
 
         /* Method used to increase/decrease x or y according to the direction */
         void move();
+
+        bool isHead = false;
 
     };
 

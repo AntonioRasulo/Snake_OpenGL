@@ -11,12 +11,20 @@ namespace game {
     int generateRandomCoordinate(int max);
     glm::vec2 generatePosition(int x, int y);
 
-    snakePiece::snakePiece(int xPos, int yPos, Direction dirObject) {
+    snakePiece::snakePiece(int xPos, int yPos, Direction dirObject, bool is_head) {
         Position.x = xPos;
         Position.y = yPos;
         dir = dirObject;
         Size = glm::vec2(SQUARE_SIZE, SQUARE_SIZE);
-        Sprite = Utility::ResourceManager::GetTexture("snake");
+        if(is_head)
+        {
+            isHead = true;
+            Sprite = Utility::ResourceManager::GetTexture("snake_head");
+        }
+        else
+        {
+            Sprite = Utility::ResourceManager::GetTexture("snake");
+        }
     }
 
     void snakePiece::move() {
@@ -24,15 +32,23 @@ namespace game {
         switch (dir) {
         case(Direction::UP):
             Position.y-=SQUARE_SIZE;
+            if (isHead)
+                Rotation = 0.0f;
             break;
         case(Direction::RIGHT):
             Position.x+=SQUARE_SIZE;
+            if (isHead)
+                Rotation = 90.0f;
             break;
         case(Direction::LEFT):
             Position.x-=SQUARE_SIZE;
+            if (isHead)
+                Rotation = -90.0f;
             break;
         case(Direction::DOWN):
             Position.y+=SQUARE_SIZE;
+            if (isHead)
+                Rotation = 180.0f;
             break;
         }
 
@@ -70,6 +86,7 @@ namespace game {
 
         std::string applePNG = (texturePath / "apple.png").string();
         std::string snakePNG = (texturePath / "snake.png").string();
+        std::string snakeHeadPNG = (texturePath / "snake_head.png").string();
         std::string background = (texturePath / "background.jpg").string();
         std::string bricksJPG = (texturePath / "bricks.jpg").string();
         std::string ocra = (fontsPath / "OCRAEXT.TTF").string();
@@ -106,6 +123,7 @@ namespace game {
         /* load textures */
         Utility::ResourceManager::LoadTexture(applePNG.c_str(), true, "apple");
         Utility::ResourceManager::LoadTexture(snakePNG.c_str(), true, "snake");
+        Utility::ResourceManager::LoadTexture(snakeHeadPNG.c_str(), true, "snake_head");
         Utility::ResourceManager::LoadTexture(background.c_str(), false, "background");
         Utility::ResourceManager::LoadTexture(bricksJPG.c_str(), false, "bricks");
 
@@ -263,7 +281,7 @@ namespace game {
     {
         /* reset player stats */
         snake.clear();
-        snake.push_back(snakePiece(0, 0, Direction::RIGHT));
+        snake.push_back(snakePiece(0, 0, Direction::RIGHT, true));
 
         /* Calculate new coordinates for the apple */
         int apple_x;
