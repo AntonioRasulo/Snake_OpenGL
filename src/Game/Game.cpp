@@ -11,62 +11,6 @@ namespace game {
     int generateRandomCoordinate(int max);
     glm::vec2 generatePosition(int x, int y);
 
-    snakePiece::snakePiece(int xPos, int yPos, Direction dirObject, bool is_head) {
-        Position.x = xPos;
-        Position.y = yPos;
-        dir = dirObject;
-        Size = glm::vec2(SQUARE_SIZE, SQUARE_SIZE);
-        if(is_head)
-        {
-            isHead = true;
-            Sprite = Utility::ResourceManager::GetTexture("snake_head");
-        }
-        else
-        {
-            Sprite = Utility::ResourceManager::GetTexture("snake");
-        }
-    }
-
-    void snakePiece::move() {
-
-        switch (dir) {
-        case(Direction::UP):
-            Position.y-=SQUARE_SIZE;
-            if (isHead)
-                Rotation = 0.0f;
-            break;
-        case(Direction::RIGHT):
-            Position.x+=SQUARE_SIZE;
-            if (isHead)
-                Rotation = 90.0f;
-            break;
-        case(Direction::LEFT):
-            Position.x-=SQUARE_SIZE;
-            if (isHead)
-                Rotation = -90.0f;
-            break;
-        case(Direction::DOWN):
-            Position.y+=SQUARE_SIZE;
-            if (isHead)
-                Rotation = 180.0f;
-            break;
-        }
-
-        if (Position.y < 0) {
-            Position.y = (NUM_ROWS - 1) * SQUARE_SIZE;
-        }
-        else if (Position.y > (NUM_ROWS - 1) * SQUARE_SIZE) {
-            Position.y = 0;
-        }
-        else if (Position.x > (NUM_COLUMN - 1) * SQUARE_SIZE) {
-            Position.x = 0;
-        }
-        else if (Position.x < 0) {
-            Position.x = (NUM_COLUMN - 1) * SQUARE_SIZE;
-        }
-
-    }
-
     Game::Game()
         : m_state(GAME_MENU), Keys(), Renderer(nullptr), Text(nullptr), score(0), apple(), snake()
     {
@@ -147,7 +91,7 @@ namespace game {
             DoCollisions();
 
             /* Move every piece of the snake */
-            for (snakePiece& piece : snake) {
+            for (SnakePiece& piece : snake) {
                 piece.move();
             }
 
@@ -224,7 +168,7 @@ namespace game {
         case(GAME_ACTIVE): {
             /* Draw apple and snake */
             apple.Draw(*Renderer);
-            for (snakePiece& piece : snake) {
+            for (SnakePiece& piece : snake) {
                 piece.Draw(*Renderer);
             }
             /* Draw the score */
@@ -281,7 +225,7 @@ namespace game {
     {
         /* reset player stats */
         snake.clear();
-        snake.push_back(snakePiece(0, 0, Direction::RIGHT, true));
+        snake.push_back(SnakePiece(0, 0, Direction::RIGHT, true));
 
         /* Calculate new coordinates for the apple */
         int apple_x;
@@ -357,7 +301,7 @@ namespace game {
                 break;
             }
 
-            snakePiece newPiece(newX, newY, newDir);
+            SnakePiece newPiece(newX, newY, newDir);
 
             snake.push_back(newPiece);
 
@@ -403,7 +347,7 @@ namespace game {
     bool Game::generateValidAppleCoord(int x, int y)
     {
 
-        for (const snakePiece& piece: snake)
+        for (const SnakePiece& piece: snake)
         {
             if (x == piece.Position.x && y == piece.Position.y)
             {

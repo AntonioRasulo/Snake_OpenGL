@@ -9,48 +9,9 @@
 #include <SFML/Audio.hpp>
 #include "GameObject.hpp"
 #include "GameLevel.hpp"
+#include "SnakePiece.hpp"
 
 namespace game {
-
-    /* Represents the current state of the game */
-    enum GameState {
-        GAME_ACTIVE,
-        GAME_MENU,
-        GAME_WIN,
-        GAME_LOOSE
-    };
-
-    /* Represents the four possible (collision) directions */
-    enum class Direction {
-        UP,
-        RIGHT,
-        DOWN,
-        LEFT
-    };
-
-    /* The Width of the screen */
-    const unsigned int SCREEN_WIDTH = 1000;
-    /* The height of the screen */
-    const unsigned int SCREEN_HEIGHT = 1000;
-
-    const int NUM_COLUMN = 25;
-    const int NUM_ROWS = 25;
-
-    const unsigned int SQUARE_SIZE = SCREEN_WIDTH / NUM_COLUMN;
-
-    struct snakePiece : public GameObject {
-        /* Constructor */
-        snakePiece(int xPos, int yPos, Direction dirObject, bool is_head = false);
-
-        /* Direction of the piece */
-        Direction dir;
-
-        /* Method used to increase/decrease x or y according to the direction */
-        void move();
-
-        bool isHead = false;
-
-    };
 
     class Game
     {
@@ -63,7 +24,7 @@ namespace game {
 
         /* Snake and Apple objects */
         GameObject apple;
-        std::vector<snakePiece> snake;
+        std::vector<SnakePiece> snake;
 
         /* Player score */
         int score;

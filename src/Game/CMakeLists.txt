@@ -7,6 +7,7 @@ target_sources(Game
         ${CMAKE_CURRENT_LIST_DIR}/Game.cpp
         ${CMAKE_CURRENT_LIST_DIR}/GameObject.cpp
         ${CMAKE_CURRENT_LIST_DIR}/GameLevel.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/SnakePiece.cpp
 )
 
 target_include_directories(Game
