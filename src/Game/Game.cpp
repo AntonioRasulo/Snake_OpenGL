@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <random>
 #include <sstream>
+#include "Config.hpp
 
 namespace game {
 
@@ -85,7 +86,12 @@ namespace game {
 
         if (GAME_ACTIVE == m_state)
         {
-            time += dt;
+            time -= dt;
+
+            if(time <= 0)
+            {
+                // TODO go to next level
+            }
 
             /* Check for collisions */
             DoCollisions();
@@ -242,7 +248,7 @@ namespace game {
         );
 
         score = 0;
-        time = 0;
+        time = levelTimes[CurrentLevel];
 
     }
 
