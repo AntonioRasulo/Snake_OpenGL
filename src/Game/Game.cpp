@@ -91,6 +91,7 @@ namespace game {
             if(time <= 0)
             {
                 // TODO go to next level
+                time = 0;
             }
 
             /* Check for collisions */
@@ -182,8 +183,9 @@ namespace game {
             Text->RenderText("Score: " + ss.str(), 5.0f, 5.0f, 1.0f);
 
             /* Draw the time */
-            ss<<(int)time;
-            Text->RenderText("Time: " + ss.str(), 800.0f, 5.0f, 1.0f);
+            std::stringstream ss_time;
+            ss_time<<(int)time;
+            Text->RenderText("Time: " + ss_time.str(), 800.0f, 5.0f, 1.0f);
 
             // Draw level
             Levels[CurrentLevel].Draw(*Renderer);
