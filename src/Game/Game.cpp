@@ -5,7 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <random>
 #include <sstream>
-#include "Config.hpp
+#include "Config.hpp"
 
 namespace game {
 
