@@ -39,7 +39,7 @@ namespace game {
 
         /* Levels */
         std::vector<GameLevel> Levels;
-        unsigned int CurrentLevel = 0;
+        unsigned int CurrentLevel;
 
         bool generateValidAppleCoord(int x, int y);
 
@@ -71,7 +71,7 @@ namespace game {
         void drawSquare(int x, int y, std::string sprite);
 
         /* reset */
-        void ResetLevel();
+        void ResetGame();
         void ResetPlayer();
 
         /* Getters */

@@ -60,9 +60,9 @@ namespace game {
         Utility::ResourceManager::LoadShader(vertexCode.c_str(), fragmentCode.c_str(), nullptr, "sprite");
         /* configure shaders */
         glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(SCREEN_WIDTH),
-            static_cast<float>(SCREEN_HEIGHT), 0.0f, -1.0f, 1.0f);
-        Utility::ResourceManager::GetShader("sprite").Use().setInt("image", 0);
-        Utility::ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
+                                            static_cast<float>(SCREEN_HEIGHT), 0.0f, -1.0f, 1.0f);
+                                            Utility::ResourceManager::GetShader("sprite").Use().setInt("image", 0);
+                                            Utility::ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
         /* set render-specific controls */
         Renderer = new Utility::SpriteRenderer(Utility::ResourceManager::GetShader("sprite"));
         /* load textures */
@@ -74,7 +74,12 @@ namespace game {
 
         // Load Levels
         GameLevel zero; zero.Load((levelsPath / "zero.txt").string().c_str());
+        GameLevel one; one.Load((levelsPath / "one.txt").string().c_str());
         Levels.push_back(zero);
+        Levels.push_back(one);
+
+        score = 0;
+        CurrentLevel = 0;
 
         /* Reset Snake and Apple position */
         ResetPlayer();
@@ -90,8 +95,17 @@ namespace game {
 
             if(time <= 0)
             {
-                // TODO go to next level
-                time = 0;
+                CurrentLevel++;
+                if(CurrentLevel >= levelTimes.size())
+                {
+                    m_state = GAME_WIN;
+                    time = 0;
+                }
+                else
+                {
+                    ResetPlayer();
+                }
+                return;
             }
 
             /* Check for collisions */
@@ -141,8 +155,10 @@ namespace game {
 
         case(GAME_LOOSE):
         case(GAME_WIN):
-            if (Keys[GLFW_KEY_SPACE]) {
-                ResetLevel();
+            if (Keys[GLFW_KEY_SPACE])
+            {
+                m_state = GameState::GAME_MENU;
+                ResetGame();
             }
             break;
         }
@@ -169,6 +185,8 @@ namespace game {
         Renderer->DrawSprite(Utility::ResourceManager::GetTexture("background"),
             glm::vec2(0.0f, 0.0f), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT), 0.0f
         );
+
+        std::stringstream ss;
 
         switch (m_state)
         {
@@ -199,12 +217,14 @@ namespace game {
 
         case(GAME_WIN):
             Text->RenderText("Congratulation! You Win!", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.4, 1.0f);
+            ss << score;
+            Text->RenderText("Final Score: " + ss.str(), 400.0f, (SCREEN_HEIGHT +50.0f )/ 2, 1.0f);
             Text->RenderText("Press Spacebar to start a new game", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.6, 1.0f);
             break;
         case(GAME_LOOSE):
 
             Text->RenderText("You have lost", 400.0f, SCREEN_HEIGHT / 2, 1.0f);
-            std::stringstream ss; ss << score;
+            ss << score;
             Text->RenderText("Final Score: " + ss.str(), 400.0f, (SCREEN_HEIGHT +50.0f )/ 2, 1.0f);
             Text->RenderText("Press Spacebar to start a new game", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.6, 1.0f);
             
@@ -223,9 +243,10 @@ namespace game {
 
     }
 
-    void Game::ResetLevel()
+    void Game::ResetGame()
     {
-        m_state = GameState::GAME_MENU;
+        score = 0;
+        CurrentLevel = 0;
         ResetPlayer();
     }
 
@@ -249,7 +270,6 @@ namespace game {
             Utility::ResourceManager::GetTexture("apple")
         );
 
-        score = 0;
         time = levelTimes[CurrentLevel];
 
     }
