@@ -72,6 +72,9 @@ namespace game {
         Utility::ResourceManager::LoadTexture(background.c_str(), false, "background");
         Utility::ResourceManager::LoadTexture(bricksJPG.c_str(), false, "bricks");
 
+        // Check joystick
+        gamepadPresent = glfwJoystickIsGamepad(GLFW_JOYSTICK_1);
+
         // Load Levels
         GameLevel zero; zero.Load((levelsPath / "zero.txt").string().c_str());
         GameLevel one; one.Load((levelsPath / "one.txt").string().c_str());
@@ -127,6 +130,12 @@ namespace game {
     bool Game::ProcessInput(float dt)
     {
 
+        GLFWgamepadstate state;
+        if(gamepadPresent == GLFW_TRUE)
+        {
+            glfwGetGamepadState(GLFW_JOYSTICK_1, &state);
+        }
+
         switch (m_state) {
         case(GAME_ACTIVE):
             if ((Keys[GLFW_KEY_W] || Keys[GLFW_KEY_UP]) && (Direction::DOWN != snake[0].dir) && (Direction::UP != snake[0].dir)) {
@@ -146,16 +155,39 @@ namespace game {
                 return true;
             }
 
+            if (state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_UP] && (Direction::DOWN != snake[0].dir) && (Direction::UP != snake[0].dir))
+            {
+                snake[0].dir = Direction::UP;
+                return true;
+            }
+            else if (state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_LEFT] && (Direction::RIGHT != snake[0].dir) && (Direction::LEFT != snake[0].dir))
+            {
+                snake[0].dir = Direction::LEFT;
+                return true;
+            }
+            else if (state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_DOWN] && (Direction::UP != snake[0].dir) && (Direction::DOWN != snake[0].dir))
+            {
+                snake[0].dir = Direction::DOWN;
+                return true;
+            }
+            else if (state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_RIGHT] && (Direction::LEFT != snake[0].dir) && (Direction::RIGHT != snake[0].dir))
+            {
+                snake[0].dir = Direction::RIGHT;
+                return true;
+            }
+
+
             break;
         case(GAME_MENU):
-            if (Keys[GLFW_KEY_SPACE]) {
+            if (Keys[GLFW_KEY_SPACE] || (state.buttons[GLFW_GAMEPAD_BUTTON_X]) || (state.buttons[GLFW_GAMEPAD_BUTTON_A]))
+            {
                 m_state = GAME_ACTIVE;
             }
             break;
 
         case(GAME_LOOSE):
         case(GAME_WIN):
-            if (Keys[GLFW_KEY_SPACE])
+            if (Keys[GLFW_KEY_SPACE]|| (state.buttons[GLFW_GAMEPAD_BUTTON_X]) || (state.buttons[GLFW_GAMEPAD_BUTTON_A]))
             {
                 m_state = GameState::GAME_MENU;
                 ResetGame();
@@ -212,21 +244,21 @@ namespace game {
         }
         case(GAME_MENU):
             Text->RenderText("Snëk!", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.4, 5.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-            Text->RenderText("Press Spacebar to start", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.6, 1.0f);
+            Text->RenderText("Press Spacebar or X to start", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.6, 1.0f);
             break;
 
         case(GAME_WIN):
             Text->RenderText("Congratulation! You Win!", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.4, 1.0f);
             ss << score;
             Text->RenderText("Final Score: " + ss.str(), 400.0f, (SCREEN_HEIGHT +50.0f )/ 2, 1.0f);
-            Text->RenderText("Press Spacebar to start a new game", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.6, 1.0f);
+            Text->RenderText("Press Spacebar or X to start a new game", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.6, 1.0f);
             break;
         case(GAME_LOOSE):
 
             Text->RenderText("You have lost", 400.0f, SCREEN_HEIGHT / 2, 1.0f);
             ss << score;
             Text->RenderText("Final Score: " + ss.str(), 400.0f, (SCREEN_HEIGHT +50.0f )/ 2, 1.0f);
-            Text->RenderText("Press Spacebar to start a new game", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.6, 1.0f);
+            Text->RenderText("Press Spacebar or X to start a new game", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.6, 1.0f);
             
             break;
         }

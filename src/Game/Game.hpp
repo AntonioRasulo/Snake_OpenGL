@@ -43,6 +43,8 @@ namespace game {
 
         bool generateValidAppleCoord(int x, int y);
 
+        int gamepadPresent = 0;
+
     public:
 
         bool Keys[1024];
