@@ -28,6 +28,7 @@ namespace game {
 
         /* Player score */
         unsigned int score;
+        unsigned int currentLevelScore;
 
         /* Current Level Time */
         float time;
@@ -74,7 +75,7 @@ namespace game {
 
         /* reset */
         void ResetGame();
-        void ResetPlayer();
+        void ResetPlayer(bool clearSnake = true);
 
         /* Getters */
         GameState getGameState() const { return m_state; }

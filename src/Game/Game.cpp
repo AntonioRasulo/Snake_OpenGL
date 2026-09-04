@@ -13,7 +13,7 @@ namespace game {
     glm::vec2 generatePosition(int x, int y);
 
     Game::Game()
-        : m_state(GAME_MENU), Keys(), Renderer(nullptr), Text(nullptr), score(0), apple(), snake()
+        : m_state(GAME_MENU), Keys(), Renderer(nullptr), Text(nullptr), score(0), currentLevelScore(0), apple(), snake()
     {
 
     }
@@ -41,7 +41,7 @@ namespace game {
         /* Music configuration */
         music.openFromFile(musicFilePath);
         music.setLooping(true);
-        music.play();
+        //music.play();
 
         /* Setting sfx */
         eatsfxBuffer.loadFromFile(eatingsfx);
@@ -244,6 +244,9 @@ namespace game {
             std::stringstream ss; ss << score;
             Text->RenderText("Score: " + ss.str(), 5.0f, 5.0f, 1.0f);
 
+            std::stringstream ss_levelScore; ss_levelScore << currentLevelScore;
+            Text->RenderText("Level Score: " + ss_levelScore.str(), 402.0f, 5.0f, 1.0f);
+
             /* Draw the time */
             std::stringstream ss_time;
             ss_time<<(int)time;
@@ -290,15 +293,19 @@ namespace game {
     void Game::ResetGame()
     {
         score = 0;
+        currentLevelScore = 0;
         CurrentLevel = 0;
         ResetPlayer();
     }
 
-    void Game::ResetPlayer()
+    void Game::ResetPlayer(bool clearSnake)
     {
         /* reset player stats */
-        snake.clear();
-        snake.push_back(SnakePiece(0, 0, Direction::RIGHT, true));
+        if(clearSnake)
+        {
+            snake.clear();
+            snake.push_back(SnakePiece(0, 0, Direction::RIGHT, true));
+        }
 
         /* Calculate new coordinates for the apple */
         int apple_x;
@@ -377,14 +384,9 @@ namespace game {
 
             snake.push_back(newPiece);
 
-            score++;
+            currentLevelScore++;
 
-            /* Check for victory */
-            if (score == SCREEN_HEIGHT * SCREEN_HEIGHT - 1) {
-                m_state = GAME_WIN;
-            }
-
-            if (score >= levelRequirements[CurrentLevel])
+            if (currentLevelScore >= levelRequirements[CurrentLevel])
             {
                 CurrentLevel++;
                 if(CurrentLevel >= levelRequirements.size())
@@ -394,9 +396,11 @@ namespace game {
                 }
                 else
                 {
-                    score -= time/10;
-                    ResetPlayer();
+                    currentLevelScore -= time/10;
+                    ResetPlayer(false);
                 }
+                score += currentLevelScore;
+                currentLevelScore = 0;
             }
 
         }
