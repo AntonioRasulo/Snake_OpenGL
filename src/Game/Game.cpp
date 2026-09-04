@@ -129,11 +129,14 @@ namespace game {
 
     bool Game::ProcessInput(float dt)
     {
-
-        GLFWgamepadstate state;
+        GLFWgamepadstate stateStorage{};
+        GLFWgamepadstate* gamepadState = nullptr;
         if(gamepadPresent == GLFW_TRUE)
         {
-            glfwGetGamepadState(GLFW_JOYSTICK_1, &state);
+            if(glfwGetGamepadState(GLFW_JOYSTICK_1, &stateStorage))
+            {
+                gamepadState = &stateStorage;
+            }
         }
 
         switch (m_state) {
@@ -155,42 +158,60 @@ namespace game {
                 return true;
             }
 
-            if (state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_UP] && (Direction::DOWN != snake[0].dir) && (Direction::UP != snake[0].dir))
+            if(gamepadState)
             {
-                snake[0].dir = Direction::UP;
-                return true;
+                if (gamepadState->buttons[GLFW_GAMEPAD_BUTTON_DPAD_UP] && (Direction::DOWN != snake[0].dir) && (Direction::UP != snake[0].dir))
+                {
+                    snake[0].dir = Direction::UP;
+                    return true;
+                }
+                else if (gamepadState->buttons[GLFW_GAMEPAD_BUTTON_DPAD_LEFT] && (Direction::RIGHT != snake[0].dir) && (Direction::LEFT != snake[0].dir))
+                {
+                    snake[0].dir = Direction::LEFT;
+                    return true;
+                }
+                else if (gamepadState->buttons[GLFW_GAMEPAD_BUTTON_DPAD_DOWN] && (Direction::UP != snake[0].dir) && (Direction::DOWN != snake[0].dir))
+                {
+                    snake[0].dir = Direction::DOWN;
+                    return true;
+                }
+                else if (gamepadState->buttons[GLFW_GAMEPAD_BUTTON_DPAD_RIGHT] && (Direction::LEFT != snake[0].dir) && (Direction::RIGHT != snake[0].dir))
+                {
+                    snake[0].dir = Direction::RIGHT;
+                    return true;
+                }
             }
-            else if (state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_LEFT] && (Direction::RIGHT != snake[0].dir) && (Direction::LEFT != snake[0].dir))
-            {
-                snake[0].dir = Direction::LEFT;
-                return true;
-            }
-            else if (state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_DOWN] && (Direction::UP != snake[0].dir) && (Direction::DOWN != snake[0].dir))
-            {
-                snake[0].dir = Direction::DOWN;
-                return true;
-            }
-            else if (state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_RIGHT] && (Direction::LEFT != snake[0].dir) && (Direction::RIGHT != snake[0].dir))
-            {
-                snake[0].dir = Direction::RIGHT;
-                return true;
-            }
-
 
             break;
         case(GAME_MENU):
-            if (Keys[GLFW_KEY_SPACE] || (state.buttons[GLFW_GAMEPAD_BUTTON_X]) || (state.buttons[GLFW_GAMEPAD_BUTTON_A]))
+            if (Keys[GLFW_KEY_SPACE])
             {
                 m_state = GAME_ACTIVE;
             }
+            else if (gamepadState)
+            {
+                if((gamepadState->buttons[GLFW_GAMEPAD_BUTTON_X]) || (gamepadState->buttons[GLFW_GAMEPAD_BUTTON_A]))
+                {
+                    m_state = GAME_ACTIVE;
+                }
+            }
+            
             break;
 
         case(GAME_LOOSE):
         case(GAME_WIN):
-            if (Keys[GLFW_KEY_SPACE]|| (state.buttons[GLFW_GAMEPAD_BUTTON_X]) || (state.buttons[GLFW_GAMEPAD_BUTTON_A]))
+            if (Keys[GLFW_KEY_SPACE])
             {
                 m_state = GameState::GAME_MENU;
                 ResetGame();
+            }
+            else if (gamepadState)
+            {
+                if((gamepadState->buttons[GLFW_GAMEPAD_BUTTON_X]) || (gamepadState->buttons[GLFW_GAMEPAD_BUTTON_A]))
+                {
+                    m_state = GameState::GAME_MENU;
+                    ResetGame();
+                }
             }
             break;
         }
