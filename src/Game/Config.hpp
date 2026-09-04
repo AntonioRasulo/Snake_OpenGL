@@ -5,7 +5,7 @@
 
 namespace game
 {
-    const std::vector<unsigned int> levelTimes{20, 20, 20, 20};
+    const std::vector<unsigned int> levelRequirements{5, 15, 30, 40, 55};
 }
 
 #endif

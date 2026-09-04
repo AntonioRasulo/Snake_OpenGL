@@ -27,7 +27,7 @@ namespace game {
         std::vector<SnakePiece> snake;
 
         /* Player score */
-        int score;
+        unsigned int score;
 
         /* Current Level Time */
         float time;

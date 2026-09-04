@@ -80,10 +80,12 @@ namespace game {
         GameLevel one; one.Load((levelsPath / "one.txt").string().c_str());
         GameLevel two; two.Load((levelsPath / "two.txt").string().c_str());
         GameLevel three; three.Load((levelsPath / "three.txt").string().c_str());
+        GameLevel four; four.Load((levelsPath / "four.txt").string().c_str());
         Levels.push_back(zero);
         Levels.push_back(one);
         Levels.push_back(two);
         Levels.push_back(three);
+        Levels.push_back(four);
 
         score = 0;
         CurrentLevel = 0;
@@ -98,22 +100,7 @@ namespace game {
 
         if (GAME_ACTIVE == m_state)
         {
-            time -= dt;
-
-            if(time <= 0)
-            {
-                CurrentLevel++;
-                if(CurrentLevel >= levelTimes.size())
-                {
-                    m_state = GAME_WIN;
-                    time = 0;
-                }
-                else
-                {
-                    ResetPlayer();
-                }
-                return;
-            }
+            time += dt;
 
             /* Check for collisions */
             DoCollisions();
@@ -327,7 +314,7 @@ namespace game {
             Utility::ResourceManager::GetTexture("apple")
         );
 
-        time = levelTimes[CurrentLevel];
+        time = 0;
 
     }
 
@@ -395,6 +382,21 @@ namespace game {
             /* Check for victory */
             if (score == SCREEN_HEIGHT * SCREEN_HEIGHT - 1) {
                 m_state = GAME_WIN;
+            }
+
+            if (score >= levelRequirements[CurrentLevel])
+            {
+                CurrentLevel++;
+                if(CurrentLevel >= levelRequirements.size())
+                {
+                    m_state = GAME_WIN;
+                    time = 0;
+                }
+                else
+                {
+                    score -= time/10;
+                    ResetPlayer();
+                }
             }
 
         }
