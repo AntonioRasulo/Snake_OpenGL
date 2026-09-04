@@ -428,9 +428,12 @@ namespace game {
     bool Game::generateValidAppleCoord(int x, int y)
     {
 
+        int pixelX = x * SQUARE_SIZE;
+        int pixelY = y * SQUARE_SIZE;
+
         for (const SnakePiece& piece: snake)
         {
-            if (x == piece.Position.x && y == piece.Position.y)
+            if (pixelX == piece.Position.x && pixelY == piece.Position.y)
             {
                 return true;
             }
@@ -438,7 +441,7 @@ namespace game {
 
         for (const auto& brick: Levels[CurrentLevel].Bricks)
         {
-            if (x == brick.Position.x && y == brick.Position.y)
+            if (pixelX == brick.Position.x && pixelY == brick.Position.y)
             {
                 return true;
             }
