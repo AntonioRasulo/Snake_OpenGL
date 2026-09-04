@@ -79,9 +79,11 @@ namespace game {
         GameLevel zero; zero.Load((levelsPath / "zero.txt").string().c_str());
         GameLevel one; one.Load((levelsPath / "one.txt").string().c_str());
         GameLevel two; two.Load((levelsPath / "two.txt").string().c_str());
+        GameLevel three; three.Load((levelsPath / "three.txt").string().c_str());
         Levels.push_back(zero);
         Levels.push_back(one);
         Levels.push_back(two);
+        Levels.push_back(three);
 
         score = 0;
         CurrentLevel = 0;
