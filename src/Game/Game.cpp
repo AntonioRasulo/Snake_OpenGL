@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <random>
 #include <sstream>
+#include <algorithm>
 #include "Config.hpp"
 
 namespace game {
@@ -396,7 +397,9 @@ namespace game {
                 }
                 else
                 {
-                    currentLevelScore -= time/10;
+                    //currentLevelScore -= time * 0.1;
+                    int adjusted = static_cast<int>(currentLevelScore) - static_cast<int>(time * 0.1f);
+                    currentLevelScore = static_cast<unsigned int>(std::max(adjusted, 0));
                     ResetPlayer(false);
                 }
                 score += currentLevelScore;
