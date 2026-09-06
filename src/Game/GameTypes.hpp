@@ -8,7 +8,8 @@ namespace game
         GAME_ACTIVE,
         GAME_MENU,
         GAME_WIN,
-        GAME_LOOSE
+        GAME_LOOSE,
+        GAME_PAUSE
     };
 
     /* The Width of the screen */

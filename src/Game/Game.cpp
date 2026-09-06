@@ -123,13 +123,22 @@ namespace game {
     {
         GLFWgamepadstate stateStorage{};
         GLFWgamepadstate* gamepadState = nullptr;
+        bool XPressed = false;
         if(gamepadPresent == GLFW_TRUE)
         {
             if(glfwGetGamepadState(GLFW_JOYSTICK_1, &stateStorage))
             {
                 gamepadState = &stateStorage;
+                if(gamepadState)
+                {
+                    XPressed = ((gamepadState->buttons[GLFW_GAMEPAD_BUTTON_X]) || (gamepadState->buttons[GLFW_GAMEPAD_BUTTON_A])) && !prevXState;
+                    prevXState = (gamepadState->buttons[GLFW_GAMEPAD_BUTTON_X]) || (gamepadState->buttons[GLFW_GAMEPAD_BUTTON_A]);
+                }
             }
         }
+
+        bool spacePressed = Keys[GLFW_KEY_SPACE] && !prevSpaceState;
+        prevSpaceState = Keys[GLFW_KEY_SPACE];
 
         switch (m_state) {
         case(GAME_ACTIVE):
@@ -148,6 +157,10 @@ namespace game {
             else if ((Keys[GLFW_KEY_D] || Keys[GLFW_KEY_RIGHT]) && (Direction::LEFT != snake[0].dir) && (Direction::RIGHT != snake[0].dir)) {
                 snake[0].dir = Direction::RIGHT;
                 return true;
+            }
+            else if (spacePressed || XPressed)
+            {
+                m_state = GAME_PAUSE;
             }
 
             if(gamepadState)
@@ -176,38 +189,29 @@ namespace game {
 
             break;
         case(GAME_MENU):
-            if (Keys[GLFW_KEY_SPACE])
+            if (spacePressed || XPressed)
             {
                 m_state = GAME_ACTIVE;
             }
-            else if (gamepadState)
-            {
-                if((gamepadState->buttons[GLFW_GAMEPAD_BUTTON_X]) || (gamepadState->buttons[GLFW_GAMEPAD_BUTTON_A]))
-                {
-                    m_state = GAME_ACTIVE;
-                }
-            }
-            
+
             break;
 
         case(GAME_LOOSE):
         case(GAME_WIN):
-            if (Keys[GLFW_KEY_SPACE])
+            if (spacePressed || XPressed)
             {
                 m_state = GameState::GAME_MENU;
                 ResetGame();
             }
-            else if (gamepadState)
+            break;
+
+        case (GAME_PAUSE):
+            if (spacePressed || XPressed)
             {
-                if((gamepadState->buttons[GLFW_GAMEPAD_BUTTON_X]) || (gamepadState->buttons[GLFW_GAMEPAD_BUTTON_A]))
-                {
-                    m_state = GameState::GAME_MENU;
-                    ResetGame();
-                }
+                m_state = GAME_ACTIVE;
             }
             break;
         }
-
         return false;
 
     }
@@ -277,8 +281,12 @@ namespace game {
             Text->RenderText("Press Spacebar or X to start a new game", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.6, 1.0f);
             
             break;
+        
+        case(GAME_PAUSE):
+            Text->RenderText("PAUSE", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.4, 5.0f);
+            Text->RenderText("Press Spacebar or X to continue", SCREEN_WIDTH * 0.32, SCREEN_HEIGHT * 0.6, 1.0f);
+            break;
         }
-
     }
 
     void Game::drawSquare(int x, int y, std::string sprite) {

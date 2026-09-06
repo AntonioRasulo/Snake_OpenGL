@@ -49,6 +49,8 @@ namespace game {
     public:
 
         bool Keys[1024];
+        bool prevSpaceState = false;
+        bool prevXState = false;
 
         /* constructor/destructor */
         Game();
